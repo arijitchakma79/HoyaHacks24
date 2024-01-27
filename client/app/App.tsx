@@ -17,8 +17,8 @@ const App = ():JSX.Element => {
     <MapView
       style={styles.map}
       initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
+        latitude: 38.906646,
+        longitude: -77.07483766666,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
