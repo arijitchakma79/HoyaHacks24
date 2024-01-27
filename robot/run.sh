@@ -1,2 +1,1 @@
-workon robot
-python main.py
+/home/bytebudgie/.virtualenvs/robot/bin/python main.py
