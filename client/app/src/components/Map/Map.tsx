@@ -1,9 +1,10 @@
 import React from "react";
-import { View,Text } from "react-native";
+import { View } from "react-native";
 import MapView, {Marker} from "react-native-maps";
 import Mapstyles from "../../styles/mapstyle";
 
 const MapComponent = ():JSX.Element => {
+    
     return(
         <View >
             <MapView style={Mapstyles.map}
@@ -13,7 +14,8 @@ const MapComponent = ():JSX.Element => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             
-            }}>
+            }}
+            > 
                 <Marker
                     coordinate={{
                          latitude: 38.906646,
