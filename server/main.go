@@ -50,13 +50,8 @@ func main() {
 
 	http.HandleFunc("/robot-get-location", appRobotLocationHandler)
 
->>>>>>> 56fbf0b9d379bb618a46ba5b44fbc711dbd9d275
 	err := http.ListenAndServe(portNum, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 56fbf0b9d379bb618a46ba5b44fbc711dbd9d275
