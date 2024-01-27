@@ -1,10 +1,18 @@
 package main
 
+/*
 import (
-    "net/http" 
+    "net/http"
 	"strconv"
 	"log"
 	"fmt"
+)*/
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
 )
 
 func robotReportHandler(w http.ResponseWriter, r *http.Request) {
@@ -15,6 +23,7 @@ func robotReportHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+/*
 func robotLocationHandler(w http.ResponseWriter, r *http.Request) {
 	queryParams := r.URL.Query()
 
@@ -34,4 +43,19 @@ func robotLocationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Printf("Robot's location is recieved at: %f, %f", robotLatitude, robotLongitude)
+}*/
+
+func robotLocationHandler(w http.ResponseWriter, r *http.Request) {
+	var location LocationResponse
+	err := json.NewDecoder(r.Body).Decode(&location)
+	if err != nil {
+		log.Println("Error decoding JSON:", err)
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	robotLatitude = location.Latitude
+	robotLongitude = location.Longitude
+
+	fmt.Fprintf(w, "Robot location updated successfully")
 }

@@ -1,32 +1,39 @@
 import React from "react";
 import { View } from "react-native";
-import MapView, {Marker} from "react-native-maps";
+import MapView, { Marker, Polyline } from "react-native-maps";
 import Mapstyles from "../../styles/mapstyle";
 
-const MapComponent = ():JSX.Element => {
-    
-    return(
-        <View >
-            <MapView style={Mapstyles.map}
-            initialRegion={{
-                latitude: 38.906646,
-                longitude: -77.07483766666,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-            
-            }}
-            > 
-                <Marker
-                    coordinate={{
-                         latitude: 38.906646,
-                        longitude: -77.07483766666 
-                    }}
-                    title="Marker Title"
-                    description="Marker Description"
-                />
-            </MapView>
-        </View>
-    )
+interface MapComponentProps {
+    currentLocation: { latitude: number; longitude: number };
+    previousLocations: { latitude: number; longitude: number }[];
 }
+
+const MapComponent: React.FC<MapComponentProps> = ({ currentLocation, previousLocations }): JSX.Element => {
+  return (
+    <View>
+      <MapView
+        style={Mapstyles.map}
+        mapType="satellite"
+        zoomTapEnabled={false}
+        initialRegion={{
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude, 
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        }}
+      >
+        <Marker
+          coordinate={{
+            latitude: 38.906646,
+            longitude: -77.07483766666,
+          }}
+          title="Robot"
+          description="Marker Description"
+        />
+        <Polyline coordinates={previousLocations} strokeWidth={5} strokeColor="red" />
+      </MapView>
+    </View>
+  );
+};
 
 export default MapComponent;
