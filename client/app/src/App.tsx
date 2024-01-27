@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { MapComponent } from './components';
 import { Appstyles } from './styles';
 import NotificationComponent from './components/notification';
+import getLocation from './services/location';
 
 const notificationData = [
   { id: '1', address: '123 Main St', date: '2024-02-01', time: '10:00 AM', description: 'Notification 1' },
@@ -36,24 +37,31 @@ const App: React.FC = (): JSX.Element => {
   const [previousLocations, setPreviousLocations] = React.useState<RobotLocation[]>([]);
 
   useEffect(() => {
-    const intervalID = setInterval(() => {
-      setPreviousLocations((prevLocations) => [...prevLocations, currentLocation]); 
-      setCurrentLocation((prevLocation) => ({
-        latitude: prevLocation.latitude + 0.0001,
-        longitude: prevLocation.longitude + 0.0001,
-      }));
-    }, 5000); // Update every 5 minutes
+    const intervalID = setInterval(async () => {
+      try {
+        // Assuming getLocation returns an object with latitude and longitude properties
+        const newLocation = await getLocation();
+        
+        setPreviousLocations((prevLocations) => [...prevLocations, currentLocation]); 
+        setCurrentLocation({
+          latitude: newLocation.latitude,
+          longitude: newLocation.longitude,
+        });
+      } catch (error) {
+        console.error('Error fetching location:', error);
+      }
+    }, 5000); 
 
     return () => clearInterval(intervalID); 
   }, [currentLocation]);
 
   return (
-    <View style={styles.container}>
+    <View style={Appstyles.container}>
       <View style={Appstyles.mapContainer}>
         <MapComponent currentLocation={currentLocation} previousLocations={previousLocations} />
       </View>
       <Text style={Appstyles.notificationTitle}>Notifications</Text>
-      <View style={styles.notificationContainer}>
+      <View style={Appstyles.notificationContainer}>
         <FlatList
           data={notificationData}
           keyExtractor={(item) => item.id}
@@ -64,14 +72,5 @@ const App: React.FC = (): JSX.Element => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  notificationContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
-});
 
 export default App;

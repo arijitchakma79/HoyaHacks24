@@ -14,6 +14,13 @@ const Appstyles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
   },
+  container: {
+    flex: 1,
+  },
+  notificationContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
 });
 
 export default Appstyles;
