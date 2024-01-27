@@ -25,6 +25,8 @@ class Filter(ABC, Thread):
         self.__weight = weight
         self.__stack = []
 
+        self.__width = 640
+
         Thread.__init__(self)
 
     def setWeight(self, weight):
@@ -33,6 +35,9 @@ class Filter(ABC, Thread):
     def getWeight(self):
         return self.__weight
     
+    def getWidth(self):
+        return self.__width
+
     def addResult(self, filterResult):
         self.__stack.append(filterResult)
 

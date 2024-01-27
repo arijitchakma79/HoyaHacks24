@@ -5,9 +5,9 @@ import cv2
 import numpy as np
 
 class DepthFilter(Filter):
-    def __init__(self, camera):
+    def __init__(self, camera, weight=1.0):
         self.__camera = camera
-        super().__init__(weight=1.0)
+        super().__init__(weight)
 
         self.__midas = torch.hub.load('intel-isl/MiDaS','MiDaS_small')
         self.__midas.to('cpu')
