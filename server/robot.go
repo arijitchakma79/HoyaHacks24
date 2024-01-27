@@ -33,5 +33,37 @@ func robotLocationHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Robot's location is recieved at: %f, %f", robotLatitude, robotLongitude)
+	fmt.Printf("Robot's location is recieved at: %f, %f\n", robotLatitude, robotLongitude)
 }
+/*
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+)
+
+var robotLatitude float64 = 0.0
+var robotLongitude float64 = 0.0
+
+type LocationResponse struct {
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+
+func robotLocationHandler(w http.ResponseWriter, r *http.Request) {
+	var location LocationResponse
+	err := json.NewDecoder(r.Body).Decode(&location)
+	if err != nil {
+		log.Println("Error decoding JSON:", err)
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	robotLatitude = location.Latitude
+	robotLongitude = location.Longitude
+
+	fmt.Fprintf(w, "Robot location updated successfully")
+}*/
