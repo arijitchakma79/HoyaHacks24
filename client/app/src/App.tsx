@@ -39,8 +39,8 @@ const App: React.FC = (): JSX.Element => {
     const intervalID = setInterval(() => {
       setPreviousLocations((prevLocations) => [...prevLocations, currentLocation]); 
       setCurrentLocation((prevLocation) => ({
-        latitude: prevLocation.latitude + 0.001,
-        longitude: prevLocation.longitude + 0.001,
+        latitude: prevLocation.latitude + 0.0001,
+        longitude: prevLocation.longitude + 0.0001,
       }));
     }, 5000); // Update every 5 minutes
 

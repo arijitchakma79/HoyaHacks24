@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { View } from "react-native";
+import { View, Animated } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import Mapstyles from "../../styles/mapstyle";
 
@@ -12,21 +12,26 @@ const MapComponent: React.FC<MapComponentProps> = ({
   currentLocation,
   previousLocations,
 }): JSX.Element => {
-  const markerRef = useRef<MapView.Marker>(null);
+  const mapViewRef = useRef<MapView>(null);
+  
+  
 
   useEffect(() => {
-    // Move the marker to the current location when it changes
-    if (markerRef.current) {
-      markerRef.current.animateMarkerToCoordinate({
+    // Move the map to the current location when it changes
+    if (mapViewRef.current) {
+      mapViewRef.current.animateToRegion({
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
       });
     }
   }, [currentLocation]);
 
   return (
     <View>
-      <MapView
+      <MapView.Animated
+        ref={mapViewRef}
         style={Mapstyles.map}
         mapType="satellite"
         zoomTapEnabled={false}
@@ -39,16 +44,15 @@ const MapComponent: React.FC<MapComponentProps> = ({
       >
         {/* Use Marker.Animated for smooth animation */}
         <Marker.Animated
-          ref={markerRef}
           coordinate={{
-            latitude: 38.906646,
-            longitude: -77.07483766666,
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude,
           }}
           title="Robot"
           description="Marker Description"
         />
         <Polyline coordinates={previousLocations} strokeWidth={5} strokeColor="red" />
-      </MapView>
+      </MapView.Animated>
     </View>
   );
 };
