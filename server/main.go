@@ -1,25 +1,25 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+    "log" 
+    "net/http" 
 )
 
+var robotLatitude float64 = 0.0
+var robotLongitude float64 = 0.0
+
+const portNum string = ":9090"
+
 func main() {
-	router := gin.Default()
+    log.Println("Starting our simple http server.")
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello World from Go server!",
-		})
-	})
+    http.HandleFunc("/robot-set-report", robotReportHandler)
+	http.HandleFunc("/robot-set-location", robotLocationHandler)
 
-	router.GET("/api/example", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "This is an example API endpoint.",
-		})
-	})
+	http.HandleFunc("/robot-get-location", appRobotLocationHandler)
 
-	router.Run(":9090")
+    err := http.ListenAndServe(portNum, nil)
+    if err != nil {
+        log.Fatal(err)
+    }
 }
