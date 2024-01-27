@@ -2,11 +2,12 @@ from filters.filter import Filter, FilterResult
 
 import numpy as np
 import random
+import time
 
 from perlin_noise import PerlinNoise
 
 class RandomBias(Filter):
-    def __init__(self, weight=0.2):
+    def __init__(self, weight=0.05):
         super().__init__(weight)
         self.__noise = PerlinNoise(octaves=1, seed=random.randint(0,99999999)) 
         
@@ -16,6 +17,7 @@ class RandomBias(Filter):
     def run(self):
         offset = 0
         while True:
+            #print("random")
             x = [(t * 0.003) for t in range(self.getWidth())]
 
             hist = np.array([self.__noise([t, offset]) for t in x])
@@ -24,4 +26,6 @@ class RandomBias(Filter):
             #hist = (hist + 1) / 2
 
             offset += 0.0001
-            self.addResult(FilterResult(hist))
+            self.addResult(FilterResult(self, hist))
+
+            time.sleep(0.2)

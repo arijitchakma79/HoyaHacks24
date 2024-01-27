@@ -4,9 +4,14 @@ from threading import Thread
 import numpy as np
 
 class FilterResult:
-    def __init__(self, interestMap=np.ones(640), uncertanityMap=np.zeros(640)):
+    def __init__(self, filter, interestMap=np.ones(640), uncertanityMap=np.zeros(640)):
+        self.__filter = filter
         self.__interestMap = interestMap
         self.__uncertanityMap = uncertanityMap
+        self.__time = 0
+
+    def getFilter(self):
+        return self.__filter
 
     def setInterestMap(self, interestMap):
         self.__interestMap = interestMap
@@ -19,12 +24,17 @@ class FilterResult:
 
     def getUncertanityMap(self):
         return self.__uncertanityMap
+    
+    def passTime(self):
+        self.__time+=1
+    
+    def getTime(self):
+        return self.__time
 
 class Filter(ABC, Thread):
     def __init__(self, weight = 1.0):
         self.__weight = weight
         self.__stack = []
-
         self.__width = 640
 
         Thread.__init__(self)

@@ -5,7 +5,7 @@ class GPS:
         self.__sp = Serial('/dev/ttyACM0', 4800, timeout=1.0)
         self.__timeoutStep = 100
 
-    def convert(self, latStr, longStr):
+    def __convert(self, latStr, longStr):
         latDeg = int(latStr[0:2])
         latMin = float(latStr[2:len(latStr) - 1]) / 60
         latitude = latDeg + latMin
@@ -35,8 +35,8 @@ class GPS:
                     if(latStr != '' and longStr != ''):
                         latitude, longitude = self.__convert(latStr, longStr)
                     break
-            except:
-                print("GPS Error!")
+            except Exception as e:
+                print("GPS Error: " + str(e))
                 break
 
 
@@ -45,9 +45,10 @@ class GPS:
     def close(self):
         self.__sp.close()
 
-"""
+
 gps = GPS()
 
+"""
 while True:
     lat, long = gps.getCoords()
     print("Latitude: " + str(lat) + " Longitude: " + str(long))"""
