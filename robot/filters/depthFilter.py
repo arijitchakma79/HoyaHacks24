@@ -25,6 +25,8 @@ class DepthFilter(Filter):
             if(frame is None):
                 continue
 
+            #print("depth")
+
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             imgbatch = self.__transform(gray).to('cpu')
@@ -43,4 +45,7 @@ class DepthFilter(Filter):
             hist /= np.max(hist)
             hist = 1 - hist
 
-            self.addResult(FilterResult(hist))
+            cv2.imwrite("temp/depthMap.png", output)
+            cv2.imwrite("temp/frame.png", frame)
+
+            self.addResult(FilterResult(self, hist))

@@ -1,3 +1,4 @@
+
 package main
 
 import (
@@ -5,6 +6,12 @@ import (
 	"log"
 	"net/http"
 )
+
+type LocationResponse struct {
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+
 
 func appRobotLocationHandler(w http.ResponseWriter, r *http.Request) {
 	locationResponse := LocationResponse{
