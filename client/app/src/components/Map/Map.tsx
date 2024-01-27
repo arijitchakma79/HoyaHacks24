@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { View } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import Mapstyles from "../../styles/mapstyle";
 
 interface MapComponentProps {
-    currentLocation: { latitude: number; longitude: number };
-    previousLocations: { latitude: number; longitude: number }[];
+  currentLocation: { latitude: number; longitude: number };
+  previousLocations: { latitude: number; longitude: number }[];
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ currentLocation, previousLocations }): JSX.Element => {
+const MapComponent: React.FC<MapComponentProps> = ({
+  currentLocation,
+  previousLocations,
+}): JSX.Element => {
+  const markerRef = useRef<MapView.Marker>(null);
+
+  useEffect(() => {
+    // Move the marker to the current location when it changes
+    if (markerRef.current) {
+      markerRef.current.animateMarkerToCoordinate({
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
+      });
+    }
+  }, [currentLocation]);
+
   return (
     <View>
       <MapView
@@ -17,12 +32,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ currentLocation, previousLo
         zoomTapEnabled={false}
         initialRegion={{
           latitude: currentLocation.latitude,
-          longitude: currentLocation.longitude, 
+          longitude: currentLocation.longitude,
           latitudeDelta: 0.005,
           longitudeDelta: 0.005,
         }}
       >
-        <Marker
+        {/* Use Marker.Animated for smooth animation */}
+        <Marker.Animated
+          ref={markerRef}
           coordinate={{
             latitude: 38.906646,
             longitude: -77.07483766666,
