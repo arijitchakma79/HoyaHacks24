@@ -1,7 +1,8 @@
-from filters.filter import Filter
+from filters.filter import Filter, FilterResult
 
 import torch
 import cv2
+import numpy as np
 
 class DepthFilter(Filter):
     def __init__(self, camera):
@@ -14,6 +15,9 @@ class DepthFilter(Filter):
 
         self.__transforms = torch.hub.load('intel-isl/MiDaS','transforms')
         self.__transform = self.__transforms.small_transform
+
+    def getName(self):
+        return "depthFilter"
 
     def run(self):
         while True:
@@ -34,7 +38,9 @@ class DepthFilter(Filter):
                 ).squeeze()
 
             output = prediction.cpu().numpy()
-            #output_norm = cv2.normalize(output, None, 0, 1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
+           
+            hist = np.sum(output, axis=0)
+            hist /= np.max(hist)
+            hist = 1 - hist
 
-            cv2.imwrite("depthMap.png", output)
-            
+            self.addResult(FilterResult(hist))

@@ -1,7 +1,8 @@
-import numpy as np
 from filters.filter import Filter, FilterResult
-
 from filters.depthFilter import DepthFilter
+
+import numpy as np
+import matplotlib.pyplot as plt
 
 class SensorFusion:
     def __init__(self, camera):
@@ -26,4 +27,17 @@ class SensorFusion:
         return self.__interestMap
     
     def updateInterestMap(self):
-        pass
+        for filter in self.__filters:
+            filterResult = filter.popResult()
+
+            if(filterResult is not None):
+                self.__saveHist(filterResult.getInterestMap(), filter.getName()+"Interest.png")
+
+    def __saveHist(self, hist, file):
+        plt.figure()
+        plt.title("Histogram")
+        plt.xlabel("Bins")
+        plt.ylabel("# of Pixels")
+        plt.plot(hist)
+        plt.xlim([0, hist.shape[0]])
+        plt.savefig(file)

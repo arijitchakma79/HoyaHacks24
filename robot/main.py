@@ -1,18 +1,23 @@
 from screen import Screen
 from navigator import Navigator
 from camera import Camera
+from sensorFusion import SensorFusion
+
 import cv2
 
-from sensorFusion import SensorFusion
 
 camera = Camera()
 
 sensorFusion = SensorFusion(camera)
 sensorFusion.startFilters()
 
+
+
 while True:
     frame = camera.readFrame()
-    print("main")
+   
+    sensorFusion.updateInterestMap()
+
     if cv2.waitKey(1) == ord('q'):
         break
 
