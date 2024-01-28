@@ -11,7 +11,6 @@ type LocationResponse struct {
 	Longitude float64 `json:"longitude"`
 }
 
-
 func appRobotLocationHandler(w http.ResponseWriter, r *http.Request) {
 	locationResponse := LocationResponse{
 		Latitude:  robotLatitude,

@@ -1,13 +1,28 @@
 import { StyleSheet } from "react-native";
 
-const notificationBoxStyles = StyleSheet.create({
+const notificationStyles = StyleSheet.create({
   notificationItem: {
-    marginBottom: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    marginVertical: 5,
+    backgroundColor: "#eee",
     borderRadius: 5,
+  },
+  notificationContent: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+  },
+  button: {
+    marginLeft: 10,
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#333",
   },
 });
 
-export default notificationBoxStyles;
+export default notificationStyles;

@@ -1,5 +1,5 @@
 import Mapstyles from "./mapstyle";
 import Appstyles from "./appStyle";
-import notificationBoxStyles from "./notificationBoxStyle";
+import notificationStyles from "./notificationBoxStyle";
 
-export {Mapstyles, Appstyles, notificationBoxStyles};
+export {Mapstyles, Appstyles, notificationStyles};

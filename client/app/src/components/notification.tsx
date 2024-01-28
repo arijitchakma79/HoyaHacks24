@@ -1,28 +1,56 @@
-import React from "react";
-import {View, Text, StyleSheet} from "react-native";
-import { notificationBoxStyles } from "../styles";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Geocoding from 'react-native-geocoding';
+import { notificationStyles } from '../styles';
+import { handleTickPress, handleCrossPress } from '../services/notifications';
+
+Geocoding.init('AIzaSyDYlE5EHSkVSUw0KbMqbjws0-XEAtV0FMU');
+
 interface Notifications {
-    id:string,
-    address: string,
-    date: string,
-    time: string,
-    description: string,
+  id: string;
+  latitude: number;
+  longitude: number;
+  reportTime: string;
+  reportDate: string;
+  description: string;
 }
 
 interface NotificationsComponentProps {
-    notification: Notifications;
+  notification: Notifications;
 }
-
 
 const NotificationComponent: React.FC<NotificationsComponentProps> = ({ notification }) => {
-    return (
-        <View style={notificationBoxStyles.notificationItem}>
-            <Text>{`Address: ${notification.address}`}</Text>
-            <Text>{`Date: ${notification.date}`}</Text>
-            <Text>{`Time: ${notification.time}`}</Text>
-            <Text>{`Description: ${notification.description}`}</Text>
-        </View>
-    )
-}
+  const [address, setAddress] = useState<string>('');
+
+  useEffect(() => {
+   
+    Geocoding.from(notification.latitude, notification.longitude)
+      .then((json) => {
+
+        
+        const extractedAddress = json.results[0]?.formatted_address || 'Address not available';
+        setAddress(extractedAddress);
+      })
+      .catch((error) => console.error('Error fetching address:', error));
+  }, [notification.latitude, notification.longitude]);
+
+  return (
+    <View style={notificationStyles.notificationItem}>
+      <View style={notificationStyles.notificationContent}>
+        <Text>{`Date: ${notification.reportDate}`}</Text>
+        <Text>{`Time: ${notification.reportTime}`}</Text>
+        <Text>{`Address: ${address}`}</Text>
+      </View>
+      <View style={notificationStyles.buttonContainer}>
+        <TouchableOpacity style={notificationStyles.button} onPress={() => handleTickPress(notification.id)}>
+          <Text>✓</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={notificationStyles.button} onPress={() => handleCrossPress(notification.id)}>
+          <Text>✗</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 export default NotificationComponent;
