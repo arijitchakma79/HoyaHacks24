@@ -7,12 +7,6 @@ import getLocation from './services/location';
 import axios from 'axios';
 
 
-
-interface RobotLocation {
-  latitude: number;
-  longitude: number;
-}
-
 const App: React.FC = (): JSX.Element => {
   const [currentLocation, setCurrentLocation] = useState({ latitude: 38.906646, longitude: -77.07483766666 });
   const [previousLocations, setPreviousLocations] = useState<Array<{ latitude: number; longitude: number }>>([]);
@@ -29,7 +23,7 @@ const App: React.FC = (): JSX.Element => {
       }
     };
 
-    // Fetch location data every 5 seconds
+    // Fetching  location data every 5 seconds
     const intervalID = setInterval(async () => {
       try {
         // Assuming getLocation returns an object with latitude and longitude properties

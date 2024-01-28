@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Geocoding from 'react-native-geocoding';
 import { notificationStyles } from '../styles';
-import { handleTickPress, handleCrossPress } from '../services/notifications';
+import { handleTickPress, handleCrossPress } from '../services/handleNB';
 
 Geocoding.init('AIzaSyDYlE5EHSkVSUw0KbMqbjws0-XEAtV0FMU');
 
 interface Notifications {
-  id: string;
+  _id: string;
   latitude: number;
   longitude: number;
   reportTime: string;
@@ -34,6 +34,7 @@ const NotificationComponent: React.FC<NotificationsComponentProps> = ({ notifica
       .catch((error) => console.error('Error fetching address:', error));
   }, [notification.latitude, notification.longitude]);
 
+
   return (
     <View style={notificationStyles.notificationItem}>
       <View style={notificationStyles.notificationContent}>
@@ -42,10 +43,10 @@ const NotificationComponent: React.FC<NotificationsComponentProps> = ({ notifica
         <Text>{`Address: ${address}`}</Text>
       </View>
       <View style={notificationStyles.buttonContainer}>
-        <TouchableOpacity style={notificationStyles.button} onPress={() => handleTickPress(notification.id)}>
+        <TouchableOpacity style={notificationStyles.button} onPress={() => handleTickPress(notification._id)}>
           <Text>✓</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={notificationStyles.button} onPress={() => handleCrossPress(notification.id)}>
+          <TouchableOpacity style={notificationStyles.button} onPress={() => handleCrossPress(notification._id)}>
           <Text>✗</Text>
         </TouchableOpacity>
       </View>
