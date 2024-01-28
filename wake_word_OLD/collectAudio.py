@@ -5,12 +5,7 @@ import numpy as np
 from pydub import AudioSegment
 from pydub.utils import make_chunks
 
-
 class Listener:
-    '''
-    https://github.com/LearnedVector/A-Hackers-AI-Voice-Assistant/tree/master
-    Highly inspired by this
-    '''
     def __init__(self, input_device_index):
         self.chunk = 1024
         self.FORMAT = pyaudio.paInt16
@@ -46,7 +41,7 @@ class Listener:
 if __name__ == "__main__":
     p = pyaudio.PyAudio()
     numdevices = p.get_device_count()
-    input_device_index = 1  
+    input_device_index = 1
     l = Listener(input_device_index)
     frames = []
 
@@ -55,23 +50,23 @@ if __name__ == "__main__":
             print(f"Input Device id {i} - {p.get_device_info_by_index(i).get('name')}")
 
     print("One class or zero class? (1/0)")
-    input = input()
+    user_input = input()
 
-    if input == "1":
+    if user_input == "1":
         folder = "one"
-    else: 
+    else:
         folder = "zero"
 
-    l.stream.start_stream()  
+    l.stream.start_stream()
     try:
-        for i in range(5):
+        for i in range(100):
             for k in range(int((l.sampleRate / l.chunk) * l.length)):
                 data = l.stream.read(l.chunk)
-                frames.append(l.adjust_input_gain(data, gain=16))
+                frames.append(l.adjust_input_gain(data, gain=25))
                 print(i)
 
     finally:
-        l.stream.stop_stream()  
+        l.stream.stop_stream()
         l.stream.close()
         l.p.terminate()
 
@@ -80,18 +75,11 @@ if __name__ == "__main__":
     print(f"{i} samples taken")
 
     audio = AudioSegment.from_file(savePath)
-    length = l.seconds * 1000 # this is in miliseconds
+    length = l.length * 1000
     chunks = make_chunks(audio, length)
     names = []
-    for i, chunk in enumerate(chunks):
-        _name = savePath.split("/")[-1]
-        name = "{}_{}".format(i, _name)
-        wav_path = os.path.join("one", name)
-        chunk.export(wav_path, format="wav")
 
+    for j, chunk in enumerate(chunks):
+        chunk.export(os.path.join(folder, f"{j}.wav"), format="wav")
 
-
-        
     print("Done")
-
-
