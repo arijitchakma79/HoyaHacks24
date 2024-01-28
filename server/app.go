@@ -13,7 +13,6 @@ type LocationResponse struct {
 
 
 func appRobotLocationHandler(w http.ResponseWriter, r *http.Request) {
-	
 	locationResponse := LocationResponse{
 		Latitude:  robotLatitude,
 		Longitude: robotLongitude,
