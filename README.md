@@ -14,12 +14,29 @@ Scout is Hackathon project we built with goal of tackling the demand and need fo
 ->under wake_word_NEW/
 <hr>
 
-<h3>To run the server:<h3>
-1) cd server/
-2) build go
-3) ./server
-4) cd ..
+<h3>To run the server:</h3>
+<code>
+cd server/
+build go
+./server
+cd ..
+</code>
 
-<h3>To run the robot code:<h3>
+<h3>To run the robot code:</h3>
+<code>
 1) cd robot/
 2) python robot.py
+</code>
+<hr>
+
+<h3>Python Requirements:</h3>
+gpiozero==2.0
+matplotlib==3.6.3
+numpy==1.24.2
+perlin_noise==1.12
+pygame==2.1.2
+pyserial==3.5
+Requests==2.31.0
+scipy==1.12.0
+SpeechRecognition==3.10.1
+torch==2.1.2
