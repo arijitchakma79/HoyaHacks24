@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"github.com/go-chi/chi"
 )
 
 var (
@@ -13,8 +14,6 @@ var (
 )
 
 const portNum string = ":9090"
-
-
 
 func main() {
 	// Connect to MongoDB
@@ -27,17 +26,19 @@ func main() {
 
 	log.Println("Starting our simple http server.")
 
+	r := chi.NewRouter()
+
 	// Robot
-	http.HandleFunc("/robot-set-report", robotReportHandler)
-	http.HandleFunc("/robot-set-location", robotLocationHandler)
-	http.HandleFunc("/robot-get-all-reports", getAllReports)
-	http.HandleFunc("/delete-report", deleteReportHandler)
+	r.HandleFunc("/robot-set-report", robotReportHandler)
+	r.HandleFunc("/robot-set-location", robotLocationHandler)
+	r.HandleFunc("/robot-get-all-reports", getAllReports)
+	r.HandleFunc("/delete-report/{id}", deleteReportHandler)
 
 	// App
-	http.HandleFunc("/robot-get-location", appRobotLocationHandler)
-	http.HandleFunc("/robot-get-report", GetReportNotification)
+	r.HandleFunc("/robot-get-location", appRobotLocationHandler)
+	r.HandleFunc("/robot-get-report", GetReportNotification)
 
-	err = http.ListenAndServe(portNum, nil)
+	err = http.ListenAndServe(portNum, r)
 	if err != nil {
 		log.Fatal(err)
 	}

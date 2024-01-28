@@ -7,6 +7,7 @@ require (
 	github.com/chenzhuoyu/iasm v0.9.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-gonic/gin v1.9.1 // indirect
+	github.com/go-chi/chi v1.5.5 // indirect
 	github.com/go-playground/validator/v10 v10.17.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect

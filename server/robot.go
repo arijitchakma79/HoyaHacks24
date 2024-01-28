@@ -9,6 +9,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+    "github.com/go-chi/chi"
 )
 
 type Report struct {
@@ -81,7 +82,7 @@ func robotReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer client.Disconnect(context.Background())
 
-	// Insert report into MongoDB
+	// Inserting report into MongoDB
 	err = insertReport(client, "Records", "Records", report)
 	if err != nil {
 		log.Println("Error inserting report into MongoDB:", err)
@@ -149,45 +150,42 @@ func getAllReports(w http.ResponseWriter, r *http.Request) {
     w.Write(result)
 }
 
-
 func deleteReportHandler(w http.ResponseWriter, r *http.Request) {
-    // Parse request parameters
-    params := r.URL.Query()
-    reportID := params.Get("reportID")
+	// Extract reportID from the URL path
+	reportIDStr := chi.URLParam(r, "id")
 
-    // Convert reportID to ObjectID
-    objectID, err := primitive.ObjectIDFromHex(reportID)
-    if err != nil {
-        http.Error(w, "Invalid reportID", http.StatusBadRequest)
-        return
-    }
+	// Convert reportID to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(reportIDStr)
+	if err != nil {
+		http.Error(w, "Invalid reportID", http.StatusBadRequest)
+		return
+	}
 
-    // Prepare filter to find the report by ID
-    filter := bson.M{"_id": objectID}
+	// Prepare filter to find the report by ID
+	filter := bson.M{"_id": objectID}
 
-    // Connect to MongoDB
-    client, err := connectToMongoDB()
-    if err != nil {
-        log.Println("Error connecting to MongoDB:", err)
-        http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-        return
-    }
-    defer client.Disconnect(context.Background())
+	// Connect to MongoDB
+	client, err := connectToMongoDB()
+	if err != nil {
+		log.Println("Error connecting to MongoDB:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(context.Background())
 
-    // Get the database and collection
-    db := client.Database("YourDBName")
-    collection := db.Collection("YourCollectionName")
+	// Get the database and collection
+	db := client.Database("YourDBName")
+	collection := db.Collection("YourCollectionName")
 
-    // Delete the report
-    _, err = collection.DeleteOne(context.Background(), filter)
-    if err != nil {
-        log.Println("Error deleting report from MongoDB:", err)
-        http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-        return
-    }
+	// Delete the report
+	_, err = collection.DeleteOne(context.Background(), filter)
+	if err != nil {
+		log.Println("Error deleting report from MongoDB:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 
-    // Send success response
-    w.WriteHeader(http.StatusOK)
-    w.Write([]byte("Report deleted successfully"))
+	// Send success response
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Report deleted successfully"))
 }
-
