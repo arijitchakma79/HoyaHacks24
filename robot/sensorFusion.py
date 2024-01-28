@@ -15,7 +15,7 @@ class SensorFusion:
         self.__interestMap = np.zeros(640)
 
         self.__filters = []
-        self.__filterResults = []
+        self.__filterResults = {"depthFilter":None,"forwardBias":None,"randomBias":None}
         self.__addFilters()
 
     def __addFilter(self, filter):
@@ -34,32 +34,29 @@ class SensorFusion:
         return self.__interestMap
     
     def updateInterestMap(self):
-        for filterResult in self.__filterResults:
-            filterResult.passTime()
-            if(filterResult.getTime() >= 15):
-                self.__filterResults.remove(filterResult)
-
         for filter in self.__filters:
             filterResult = filter.popResult()
 
             if(filterResult is not None):
+                self.__filterResults[filter.getName()] = filterResult
                 #self.__saveHist(filterResult.getInterestMap(), filter.getName()+"Interest.png")
-                self.__filterResults.append(filterResult)
-
-                #self.__interestMap += filterResult.getInterestMap()
-                #self.__interestMap /= np.max(self.__interestMap)
-                #self.__saveHist(self.__interestMap, "interestMap.png")
 
         self.__interestMap = np.zeros(640)
-        for filterResult in self.__filterResults:
-            self.__interestMap += filterResult.getInterestMap() * filterResult.getFilter().getWeight()
+        for key, value in self.__filterResults.items():
+            if self.__filterResults[key] is None:
+                continue
+            self.__interestMap += self.__filterResults[key].getInterestMap() * self.__filterResults[key].getFilter().getWeight()
+
         self.__interestMap /= np.max(self.__interestMap)
-        pos = np.argmax(self.__interestMap)/640
-        #print(pos)
-
-        #self.__saveHist(self.__interestMap, "interestMap.png")
         
-
+        plt.figure()
+        plt.title("Histogram")
+        plt.xlabel("Bins")
+        plt.ylabel("# of Pixels")
+        plt.plot(self.__interestMap)
+        plt.xlim([0, self.__interestMap.shape[0]])
+        plt.show(block=True)
+        #self.__saveHist(self.__interestMap, "interestMap.png")
 
     def __saveHist(self, hist, file):
         if(self.__debug == False):

@@ -13,8 +13,9 @@ class Camera:
 
     def readFrame(self):
         ret, frame = self.__cap.read()
-        self.__lastFrame = frame
+        frame = cv2.resize(frame,(640, 480))
 
+        self.__lastFrame = frame
         return frame
     
     def getLastFrameCopy(self):

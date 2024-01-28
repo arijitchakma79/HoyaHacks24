@@ -40,6 +40,7 @@ class GPS:
                 break
 
 
+
         return latitude, longitude
 
     def close(self):

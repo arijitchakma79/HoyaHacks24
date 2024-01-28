@@ -1,1 +1,1 @@
-/home/bytebudgie/.virtualenvs/robot/bin/python main.py
+python main.py

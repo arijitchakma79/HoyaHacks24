@@ -40,12 +40,13 @@ class DepthFilter(Filter):
                 ).squeeze()
 
             output = prediction.cpu().numpy()
+            cropped = output[100:480,:]
            
-            hist = np.sum(output, axis=0)
+            hist = np.sum(cropped, axis=0)
             hist /= np.max(hist)
             hist = 1 - hist
 
-            cv2.imwrite("temp/depthMap.png", output)
+            cv2.imwrite("temp/depthMap.png", cropped)
             cv2.imwrite("temp/frame.png", frame)
 
             self.addResult(FilterResult(self, hist))

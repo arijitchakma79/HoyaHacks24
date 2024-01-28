@@ -9,3 +9,7 @@ class Client:
 
     def sendRobotLocation(self, latitude, longitude):
         response = requests.get(self.__address + "/robot-set-location?"+self.__gps2str(latitude, longitude))
+
+    def sendReport(self, latitude, longitude, time, day):
+        print(self.__address + "/robot-set-report?"+self.__gps2str(latitude, longitude)+"&day="+day+"&time="+str(time))
+        response = requests.get(self.__address + "/robot-set-report?"+self.__gps2str(latitude, longitude)+"&day="+day+"&time="+str(time))
